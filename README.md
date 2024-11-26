@@ -1,2 +1,2 @@
 # AlphaOracle
-**Building a trading using `Machine Learning` and 'Vectorbt`**
+**Building a Automatic trading bot using `Machine Learning` and 'Vectorbt`**
