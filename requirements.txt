@@ -1,0 +1,10 @@
+numpy
+pandas
+tqdm
+requests
+beautifulsoup4
+lxml
+yfinance
+matplotlib
+scikit-learn
+seaborn
