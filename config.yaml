@@ -1,0 +1,151 @@
+data_params:
+  LINK: "https://en.wikipedia.org/wiki/NIFTY_50"
+  end_date: "2024-10-31"
+  ticker_list_path: "nifty50_list.pickle"
+  data_path: "nifty50_adsclose_joined.csv"
+  window: 14
+  ticker: "TRENT.NS"
+  columns:
+    - "ADANIENT.NS"
+    - "ADANIPORTS.NS"
+    - "APOLLOHOSP.NS"
+    - "ASIANPAINT.NS"
+    - "AXISBANK.NS"
+    - "BAJAJ-AUTO.NS"
+    - "BAJFINANCE.NS"
+    - "BAJAJFINSV.NS"
+    - "BEL.NS"
+    - "BPCL.NS"
+    - "BHARTIARTL.NS"
+    - "BRITANNIA.NS"
+    - "CIPLA.NS"
+    - "COALINDIA.NS"
+    - "DRREDDY.NS"
+    - "EICHERMOT.NS"
+    - "GRASIM.NS"
+    - "HCLTECH.NS"
+    - "HDFCBANK.NS"
+    - "HDFCLIFE.NS"
+    - "HEROMOTOCO.NS"
+    - "HINDALCO.NS"
+    - "HINDUNILVR.NS"
+    - "ICICIBANK.NS"
+    - "INDUSINDBK.NS"
+    - "INFY.NS"
+    - "ITC.NS"
+    - "JSWSTEEL.NS"
+    - "KOTAKBANK.NS"
+    - "LT.NS"
+    - "M&M.NS"
+    - "MARUTI.NS"
+    - "NESTLEIND.NS"
+    - "NTPC.NS"
+    - "ONGC.NS"
+    - "POWERGRID.NS"
+    - "RELIANCE.NS"
+    - "SBILIFE.NS"
+    - "SHRIRAMFIN.NS"
+    - "SBIN.NS"
+    - "SUNPHARMA.NS"
+    - "TCS.NS"
+    - "TATACONSUM.NS"
+    - "TATAMOTORS.NS"
+    - "TATASTEEL.NS"
+    - "TECHM.NS"
+    - "TITAN.NS"
+    - "TRENT.NS"
+    - "ULTRACEMCO.NS"
+    - "WIPRO.NS"
+    - "SMA_20_TRENT.NS"
+    - "EMA_20_TRENT.NS"
+    - "20_day_std_TRENT.NS"
+    - "Momentum_TRENT.NS"
+    - "MACD_TRENT.NS"
+    - "rsi_TRENT.NS"
+  train_test_split: 0.75
+  scaler_path: "stnd_scaler.pkl"
+  threshold: 3
+
+
+# first experiment run -- 4th
+# classifiers:
+#   SVC:
+#     init_params:
+#       probability: true
+#     tuning_params:
+#       C: [0.1, 1, 10]
+#       kernel: ["linear", "rbf"]
+#       gamma: ["scale", "auto"]
+  
+#   RandomForestClassifier:
+#     init_params:
+#       n_estimators: 100
+#       max_depth: 10
+#       random_state: 42
+#     tuning_params:
+#       n_estimators: [50, 100, 150]
+#       max_depth: [5, 10, 15]
+#       min_samples_split: [2, 5]
+#       min_samples_leaf: [1, 2]
+
+#   GradientBoostingClassifier:
+#     init_params:
+#       random_state: 42
+#     tuning_params:
+#       learning_rate: [0.01, 0.1]
+#       n_estimators: [50, 100]
+#       max_depth: [3, 5]
+#       subsample: [0.8, 1.0]
+#       loss: ["log_loss"]
+
+classifiers:
+  XGBoost:
+    init_params:
+      use_label_encoder: false
+      eval_metric: 'mlogloss'  # Use 'mlogloss' for multiclass classification
+      objective: 'multi:softmax'  # Use 'multi:softmax' for multiclass classification
+      num_class: 3  # Set to 3 for 3 classes (0, 1, 2)
+    tuning_params:
+      learning_rate: [0.01, 0.05, 0.1, 0.2]
+      n_estimators: [100, 200, 300]
+      max_depth: [3, 6, 9]
+      min_child_weight: [1, 3, 5]
+      subsample: [0.7, 0.8, 1.0]
+      colsample_bytree: [0.7, 0.8, 1.0]
+      gamma: [0, 0.1, 0.2]
+      alpha: [0, 0.1, 0.3]
+      lambda: [0, 0.1, 0.3]
+
+  LightGBM:
+    init_params:
+      objective: 'multiclass'
+      num_class: 3
+      metric: 'multi_logloss'  # Ensure appropriate metric
+      verbose: False
+    tuning_params:
+      learning_rate: [0.01, 0.05]  # Lower learning rate
+      n_estimators: [100, 200, 300]
+      max_depth: [6, 10, 15, 20]  # Increase max depth
+      min_child_samples: [10, 20]  # Lower min_child_samples
+      subsample: [0.7, 0.8, 1.0]
+      colsample_bytree: [0.7, 0.8, 1.0]
+      reg_alpha: [0, 0.1, 0.3]
+      reg_lambda: [0, 0.1, 0.3]
+
+
+
+
+training_params:
+  model_path: "models/random_forest_model.pkl"
+  ticker: "TRENT.NS"
+
+evaluation_params:
+  ticker: "TRENT.NS"
+  class_names:
+    buy: 1
+    sell: 2
+    hold: 0
+  confusion_matrix_path: "figures/confusion_mtx.png"
+  roc_curve_path: "figures/roc_cuvre.png"
+  backtesting_results_path: "data/backtesing.csv"
+  plot_roc: False
