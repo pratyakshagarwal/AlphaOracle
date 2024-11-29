@@ -1,3 +1,8 @@
 # AlphaOracle
-**Building a Automatic trading bot using `Machine Learning` and 'Vectorbt`**
+### Summary
+**Alpha Oracle is a Fully functional trading bot which utilize Machine Learning, kiteconnect.`**
+
+<!-- ### Dataset -->
+<!-- **The dataset used in this project** -->
+
 ### Currently Working on Deploying the project will update the repo later
